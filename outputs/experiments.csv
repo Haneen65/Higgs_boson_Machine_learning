@@ -1,0 +1,40 @@
+experiment,preprocessing,model,weights,auc,ams_smooth,ams_honest,ams_oracle,what_changed
+0 baseline,-,Dummy (most frequent),none,0.5,0.6835,1.084,1.084,no learning
+0 baseline,-,Dummy (stratified random),none,0.5008,0.6782,1.0839,1.084,no learning
+0 baseline,median impute + scale + one-hot jets,Logistic Regression,none,0.8146,2.0645,2.037,2.0767,linear baseline
+0 baseline,keep -999,Decision Tree (depth 8),none,0.8816,2.9092,2.9245,2.927,single tree
+0 baseline,keep -999,Random Forest,none,0.9053,3.4208,3.394,3.4465,bagged trees
+0 baseline,keep -999,Extra Trees,none,0.889,3.1455,3.0912,3.1737,randomised splits
+0 baseline,NaN native,HistGradientBoosting,none,0.9093,3.4698,3.476,3.5137,boosted trees
+0 baseline,NaN native,LightGBM,none,0.9099,3.5102,3.3603,3.5343,boosted trees (extension)
+7.1 missing,keep -999 as a value,HGB,none,0.9091,3.5515,3.5599,3.5746,reference
+7.1 missing,-999 -> NaN (native),HGB,none,0.9093,3.4698,3.476,3.5137,NaN handled by split direction
+7.1 missing,NaN + undefined indicators,HGB,none,0.9093,3.4698,3.476,3.5137,explicit flags added
+7.1 missing,drop the >50%-undefined columns,HGB,none,0.9057,3.4252,3.3926,3.459,remove sparse features
+7.1 missing,median impute,LogReg,none,0.8146,2.0645,2.037,2.0767,no flags: information about undefined is lost
+7.1 missing,median impute + indicators,LogReg,none,0.8152,2.0664,2.0586,2.079,flags added
+7.1 missing,drop the >50%-undefined columns,LogReg,none,0.803,2.0432,2.0377,2.053,remove sparse features
+7.2 weights,NaN native,HGB,none,0.9093,3.4698,3.476,3.5137,training weights = none
+7.2 weights,NaN native,HGB,raw,0.8951,3.5238,3.4744,3.5366,training weights = raw
+7.2 weights,NaN native,HGB,balanced,0.9028,3.3679,2.6375,3.3819,training weights = balanced
+7.2 weights,median+indicator+scale,LogReg,none,0.8152,2.0664,2.0586,2.079,training weights = none
+7.2 weights,median+indicator+scale,LogReg,raw,0.7945,2.1034,2.0948,2.1157,training weights = raw
+7.2 weights,median+indicator+scale,LogReg,balanced,0.8067,1.8087,1.8037,1.8222,training weights = balanced
+7.2 weights,keep -999,RandomForest,none,0.9053,3.4208,3.394,3.4465,training weights = none
+7.2 weights,keep -999,RandomForest,balanced,0.8824,2.6469,2.6357,2.6484,training weights = balanced
+7.3 features,NaN native,HGB,none,0.9093,3.4698,3.476,3.5137,30 original features
+7.3 features,NaN + 7 engineered features,HGB,none,0.9098,3.4984,3.4145,3.5102,engineered ratios/differences
+7.3 features,NaN native,LogReg,none,0.8152,2.0664,2.0586,2.079,30 original features
+7.3 features,NaN + 7 engineered features,LogReg,none,0.8186,2.106,2.1202,2.1181,engineered ratios/differences
+7.4 subset,all 30 features,HGB,none,0.9093,3.4698,3.476,3.5137,reference
+7.4 subset,drop 5 *_phi features,HGB,none,0.9098,3.4906,3.3941,3.5458,angles are rotation-invariant: expected little signal
+7.4 subset,top-20 by inner-split permutation importance,HGB,none,0.9091,3.4773,3.4838,3.5073,selected without looking at validation
+7.4 subset,top-12 by inner-split permutation importance,HGB,none,0.9071,3.4408,2.4409,3.4574,selected without looking at validation
+7.5 tuning,NaN + engineered,HGB (tuned),none,0.9106,3.4855,3.437,3.5056,"config chosen on inner split: {'max_iter': 400, 'learning_rate': 0.05, 'max_leaf_nodes': 63, 'min_samples_leaf': 40}"
+7.6 ensemble,single,HGB,none,0.9106,3.4855,3.437,3.5056,"single model, same features as ensemble"
+7.6 ensemble,single,LightGBM,none,0.9105,3.5482,3.5102,3.5952,"single model, same features as ensemble"
+7.6 ensemble,single,RF,none,0.9058,3.4909,3.4674,3.5169,"single model, same features as ensemble"
+7.6 ensemble,single,LogReg,none,0.8152,2.0664,2.0586,2.079,"single model, same features as ensemble"
+7.6 ensemble,rank average,HGB+LightGBM,none,0.911,3.529,3.5057,3.558,two boosters
+7.6 ensemble,rank average,HGB+LightGBM+RF,none,0.9107,3.5449,3.4933,3.5803,adds a bagged model
+7.6 ensemble,rank average,HGB+LightGBM+RF+LogReg,none,0.9042,3.5184,2.7596,3.5451,adds a linear model

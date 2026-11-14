@@ -1,0 +1,16 @@
+# raw data is never committed (see data/README.md)
+data/*.csv
+data/*.zip
+data/*.gz
+!data/README.md
+
+# python / jupyter
+__pycache__/
+.ipynb_checkpoints/
+.pytest_cache/
+*.pyc
+.venv/
+
+# secrets
+.env
+kaggle.json
